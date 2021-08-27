@@ -26,23 +26,23 @@ if [ -z ${CRUSH_ADMIN_PORT} ]; then
     CRUSH_ADMIN_PORT=8080
 fi
 
-if [[ ! -d ${CRUSH_FTP_BASE_DIR}/users/MainUsers/${CRUSH_ADMIN_USER} ]] || [[ -f ${CRUSH_FTP_BASE_DIR}/admin_user_set ]] ; then
+if [[ ! -d ${CRUSH_FTP_BASE_DIR}/users/MainUsers/${CRUSH_ADMIN_USER} ]] || [[ ! -f ${CRUSH_FTP_BASE_DIR}/admin_user_set ]] ; then
     echo "Creating default admin..."
     cd ${CRUSH_FTP_BASE_DIR} && java -jar ${CRUSH_FTP_BASE_DIR}/CrushFTP.jar -a "${CRUSH_ADMIN_USER}" "${CRUSH_ADMIN_PASSWORD}"
     touch ${CRUSH_FTP_BASE_DIR}/admin_user_set
 fi
 
-chmod +x crushftp_init.sh
+chmod +x $CRUSH_FTP_BASE_DIR/crushftp_init.sh
 ${CRUSH_FTP_BASE_DIR}/crushftp_init.sh start
 
-until [ -f prefs.XML ]
+until [ -f $CRUSH_FTP_BASE_DIR/prefs.XML ]
 do
      sleep 1
 done
 
 echo "########################################"
-echo "# User:		${CRUSH_ADMIN_USER}"
-echo "# Password:	${CRUSH_ADMIN_PASSWORD}"
+echo "# User:       ${CRUSH_ADMIN_USER}"
+echo "# Password:   ${CRUSH_ADMIN_PASSWORD}"
 echo "########################################"
 
 while true; do sleep 86400; done
